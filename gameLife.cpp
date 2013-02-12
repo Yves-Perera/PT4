@@ -44,7 +44,7 @@ void tore(){
 	
 	for(i=1;i<NB_MATRICE-1;i++){
 		matrice[i][0][first] = matrice[i][NB_MATRICE-1][first];
-		matrice[i][NB_MATRICE][first] = matrice[i][1][first];
+		matrice[i][NB_MATRICE-1][first] = matrice[i][1][first];
 
 		matrice[0][i][first] = matrice[NB_MATRICE-1][i][first];
 		matrice[NB_MATRICE][i][first] = matrice[1][i][first];
