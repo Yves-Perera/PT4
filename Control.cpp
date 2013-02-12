@@ -41,19 +41,17 @@ void nextStep(int quartier){
 void *f_thread(void *arg)
 {
   int quartier = (int&)arg;
-  //printf("Bonjour, je suis le thread %d\n", quartier);
   nextStep(quartier);
-  //return (void*)quartier;
 }
 void tore(){
 	int i;
 	
 	for(i=1;i<NB_MATRICE-1;i++){
-		matrice[i][0][first] = matrice[i][NB_MATRICE-1][first];
-		matrice[i][NB_MATRICE][first] = matrice[i][1][first];
+		matrice[i][0][first] = matrice[i][NB_MATRICE-2][first];
+		matrice[i][NB_MATRICE -1][first] = matrice[i][1][first];
 
-		matrice[0][i][first] = matrice[NB_MATRICE-1][i][first];
-		matrice[NB_MATRICE][i][first] = matrice[1][i][first];
+		matrice[0][i][first] = matrice[NB_MATRICE-2][i][first];
+		matrice[NB_MATRICE-1][i][first] = matrice[1][i][first];
 	}
 	
 }
