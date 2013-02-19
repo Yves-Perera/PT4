@@ -27,7 +27,7 @@ int main(int argc, char**argv)
 
   pthread_t tid[NB_THREADS];
   int i,j,k;
-
+	init();
 
   for(i=0;i<NB_MATRICE;i++)
 	for(j=0;j<NB_MATRICE;j++)
@@ -48,7 +48,7 @@ App.Clear();
 	  tore();
 	  //affichageShell(cpt);
 	  affichage(App);
-
+	  
 	  for(i=0;i<NB_THREADS;i++)
 	  {
 		int ret = pthread_create(&tid[i], NULL, f_thread, (void*)i);
@@ -81,5 +81,14 @@ App.Clear();
 	}
 	sleep(vitesse);
   }
+  
+    for(i=0;i<NB_MATRICE;i++){
+        for(j=0;j<NB_MATRICE;j++){
+            delete[] matrice[i][j];
+        }
+        delete[] matrice[i];
+    }
+    delete matrice;
+    
   return 0;
 }

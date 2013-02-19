@@ -10,7 +10,7 @@
 
 extern short int first;
 extern short int next;
-extern bool matrice[NB_MATRICE][NB_MATRICE][2];
+extern bool ***matrice;
 
 using namespace sf;
 

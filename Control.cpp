@@ -32,7 +32,10 @@ void nextStep(int quartier){
 	int x_min,x_max,i,j;
 	x_min = (NB_MATRICE/NB_THREADS)*quartier;
 	x_max = (NB_MATRICE/NB_THREADS)*(quartier+1);
-
+	if(quartier == 0)
+		x_min +=1;
+	if(quartier == NB_THREADS-1)
+		x_max -=1;
 	for(i=x_min; i<x_max; i++)
 		for(j=1; j<NB_MATRICE-1; j++)
 			calculeCellule(i,j);
@@ -44,9 +47,8 @@ void *f_thread(void *arg)
   nextStep(quartier);
 }
 void tore(){
-	int i;
-	
-	for(i=1;i<NB_MATRICE-1;i++){
+
+	for(int i=1;i<NB_MATRICE-1;i++){
 		matrice[i][0][first] = matrice[i][NB_MATRICE-2][first];
 		matrice[i][NB_MATRICE -1][first] = matrice[i][1][first];
 
