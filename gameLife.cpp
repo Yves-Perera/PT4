@@ -26,13 +26,10 @@ int main(int argc, char**argv)
 	int cpt = 0;
 
   pthread_t tid[NB_THREADS];
-  int i,j,k;
+  int i,j;
 	init();
 
-  for(i=0;i<NB_MATRICE;i++)
-	for(j=0;j<NB_MATRICE;j++)
-		for(k=0;k<2;k++)
-			matrice[i][j][k] = rand()%2;
+  
 	tore();
 
 App.Clear();
@@ -66,7 +63,6 @@ App.Clear();
 		  fprintf(stderr, "Erreur lors de l'attente du thread %d\n", i);
 		  return 1;
 		}
-		//printf("Le thread %d s'est terminé avec le code %d\n", i, (int)ret_val);
 	  }
 
 	  cpt++;

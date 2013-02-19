@@ -4,6 +4,8 @@
 #define multiple 2
 #define vitesse 0.2f
 
+#include <cstdlib>
+
 short int first =0;
 short int next =1;
 bool *** matrice;
@@ -22,4 +24,9 @@ void init(){
             voisins[i][j] = new short int[2];
         }
     }
+    
+    for(int i=0;i<NB_MATRICE;i++)
+		for(int j=0;j<NB_MATRICE;j++)
+			for(int k=0;k<2;k++)
+				matrice[i][j][k] = rand()%2;
 }
