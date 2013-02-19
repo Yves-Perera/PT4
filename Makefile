@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -lpthread -lsfml-graphics
+CFLAGS = -lpthread -lsfml-graphics
 EXEC_NAME = JeuDeLaVie
 INCLUDES =
 LIBS =
