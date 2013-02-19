@@ -50,6 +50,7 @@ void tore(){
 		matrice[NB_MATRICE][i][first] = matrice[1][i][first];
 	}
 	
+	
 }
 
 
