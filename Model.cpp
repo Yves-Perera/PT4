@@ -30,3 +30,20 @@ void init(){
 			for(int k=0;k<2;k++)
 				matrice[i][j][k] = rand()%2;
 }
+
+void deleteMatrice()
+{	
+    for(int i=0;i<NB_MATRICE;i++)
+    {
+		for(int j=0;j<NB_MATRICE;j++)
+		{
+             delete[] matrice[i][j];
+             delete[] voisins[i][j];
+        }
+        delete[] matrice[i];
+        delete[] voisins[i];
+    }
+    
+    delete[] matrice;
+	delete[] voisins;
+}

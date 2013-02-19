@@ -11,5 +11,6 @@ extern short int next;
 extern bool *** matrice;
 extern short int *** voisins;
 void init();
+void deleteMatrice();
 
 #endif 

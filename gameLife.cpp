@@ -78,13 +78,7 @@ App.Clear();
 	sleep(vitesse);
   }
   
-    for(i=0;i<NB_MATRICE;i++){
-        for(j=0;j<NB_MATRICE;j++){
-            delete[] matrice[i][j];
-        }
-        delete[] matrice[i];
-    }
-    delete matrice;
+    deleteMatrice();
     
   return 0;
 }
