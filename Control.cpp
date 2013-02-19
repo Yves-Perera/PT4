@@ -41,11 +41,21 @@ void nextStep(int quartier){
 			calculeCellule(i,j);
 }
 
+void calculeVoisins()
+{
+	for(int i=0;i<NB_MATRICE;i++)
+		for(int j=0;j<NB_MATRICE;j++)
+			for(int k=0;k<2;k++)
+				voisins[i][j][k] = nbCelluleVoisine(i,j);
+	
+}
+
 void *f_thread(void *arg)
 {
   int quartier = (int&)arg;
   nextStep(quartier);
 }
+
 void tore(){
 
 	for(int i=1;i<NB_MATRICE-1;i++){
