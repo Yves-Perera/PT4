@@ -43,8 +43,8 @@ void nextStep(int quartier){
 
 void calculeVoisins()
 {
-	for(int i=0;i<NB_MATRICE;i++)
-		for(int j=0;j<NB_MATRICE;j++)
+	for(int i=1;i<NB_MATRICE-1;i++)
+		for(int j=1;j<NB_MATRICE-1;j++)
 			for(int k=0;k<2;k++)
 				voisins[i][j][k] = nbCelluleVoisine(i,j);
 	
@@ -67,8 +67,8 @@ void tore(){
 	}
 	
 	matrice[0][0][first] = matrice[NB_MATRICE-2][NB_MATRICE-2][first];
-	matrice[0][NB_MATRICE][first] = matrice[NB_MATRICE-2][1][first];
-	matrice[NB_MATRICE-1][0][first] = matrice[1][NB_MATRICE-1][first];
+	matrice[0][NB_MATRICE-1][first] = matrice[NB_MATRICE-2][1][first];
+	matrice[NB_MATRICE-1][0][first] = matrice[1][NB_MATRICE-2][first];
 	matrice[NB_MATRICE-1][NB_MATRICE-1][first] = matrice[1][1][first];
 }
 
