@@ -1,9 +1,4 @@
-
-#define NB_MATRICE 400
-#define NB_THREADS 4
-#define multiple 2
-#define vitesse 0.2f
-
+#include "Constantes.h"
 #include <cstdlib>
 
 short int first =0;

@@ -15,17 +15,17 @@ $(EXEC_NAME) : $(OBJ_FILES)
 	$(CC) -o $(EXEC_NAME) $(OBJ_FILES) -lpthread -lsfml-graphics
 
 
-gameLife.o: gameLife.cpp Model.h Control.h View.h
+gameLife.o: gameLife.cpp Model.h Control.h View.h Constantes.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
-Model.o: Model.cpp
+Model.o: Model.cpp Constantes.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 		
  
-Control.o: Control.cpp Model.h
+Control.o: Control.cpp Model.h Constantes.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-View.o: View.cpp Model.h
+View.o: View.cpp Model.h Constantes.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 install :

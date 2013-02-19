@@ -6,6 +6,7 @@
 #include <time.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include "Constantes.h"
 #include "Model.h"
 
 extern short int first;
