@@ -66,10 +66,10 @@ void tore(){
 		matrice[NB_MATRICE-1][i][first] = matrice[1][i][first];
 	}
 	
-	matrice[0][0][first] = matrice[NB_MATRICE-1][NB_MATRICE-1][first];
-	matrice[0][NB_MATRICE][first] = matrice[NB_MATRICE-1][1][first];
-	matrice[NB_MATRICE][0][first] = matrice[1][NB_MATRICE-1][first];
-	matrice[NB_MATRICE][NB_MATRICE][first] = matrice[1][1][first];
+	matrice[0][0][first] = matrice[NB_MATRICE-2][NB_MATRICE-2][first];
+	matrice[0][NB_MATRICE][first] = matrice[NB_MATRICE-2][1][first];
+	matrice[NB_MATRICE-1][0][first] = matrice[1][NB_MATRICE-1][first];
+	matrice[NB_MATRICE-1][NB_MATRICE-1][first] = matrice[1][1][first];
 }
 
 
