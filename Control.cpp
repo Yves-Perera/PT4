@@ -6,6 +6,7 @@
 #include <time.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include <semaphore.h>
 #include "Constantes.h"
 #include "Model.h"
 
@@ -53,8 +54,28 @@ void calculeVoisins()
 
 void *f_thread(void *arg)
 {
-  int quartier = (int&)arg;
-  nextStep(quartier);
+	int rc;
+	/*
+	rc = pthread_barrier_wait(&barrier);
+    if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
+    {
+        printf("Could not wait on barrier\n");
+        exit(-1);
+    }*/
+	while(open)
+	{
+		rc = pthread_barrier_wait(&barrier);
+		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
+		{
+			printf("Impossible d'attendre la barrier\n");
+			exit(-1);
+		}
+		
+		int quartier = (int&)arg;
+		nextStep(quartier);	
+	}
+	printf("Thread termine\n");
+	return 0;
 }
 
 void tore(){
