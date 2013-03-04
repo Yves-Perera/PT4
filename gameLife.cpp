@@ -14,13 +14,18 @@
 #include "Control.h"
 #include "View.h"
 
+//commenter pour désactiver l affichage
+#define affichage 
 
 using namespace sf;
 
 int main(int argc, char**argv)
 {
+	#ifdef affichage
     VideoMode VMode((NB_MATRICE-2)*multiple, (NB_MATRICE-2)*multiple, 32);
     RenderWindow App(VMode, "Jeu de la Vie");
+    App.Clear();
+	#endif
 	
 	int cpt = 0;
 
@@ -28,7 +33,7 @@ int main(int argc, char**argv)
   int i,j;
 	init();
 	tore();
-	App.Clear();
+	
 	// Creation des threads
 	for(i=0;i<NB_THREADS;i++)
 	  {
@@ -39,7 +44,8 @@ int main(int argc, char**argv)
 		}
 	  }
 	int rc;
-	while(App.IsOpened())
+	
+	while(cpt < 1000) //App.IsOpened())
 	{
 		rc = pthread_barrier_wait(&barrier);
 		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
@@ -48,15 +54,17 @@ int main(int argc, char**argv)
 			exit(-1);
 		}
 		
+		#ifdef affichage
         sf::Event Event;
         while (App.GetEvent(Event))
         {
             if (Event.Type == sf::Event::Closed)
                 App.Close();
         }
-		tore();
+		affichage(App);
+		#endif
 		
-		//affichage(App);
+		tore();
 		cpt++;
 
 		if(first == 0){
