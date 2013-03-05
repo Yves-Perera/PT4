@@ -2,12 +2,12 @@
 #include <cstdlib>
 #include <pthread.h>
 #include <stdio.h>
+#include "Model.h"
 
 short int first =0;
 short int next =1;
 bool *** matrice;
 short int *** voisins;
-bool open = true;
 pthread_barrier_t barrier;
 
 void init(){
@@ -28,9 +28,11 @@ void init(){
 		for(int j=0;j<NB_MATRICE;j++)
 			for(int k=0;k<2;k++)
 				matrice[i][j][k] = rand()%2;
-				
+		
 	if(pthread_barrier_init(&barrier, NULL, NB_THREADS+1))
         printf("Impossible de creer la barrier\n");
+
+
 }
 
 void deleteMatrice()

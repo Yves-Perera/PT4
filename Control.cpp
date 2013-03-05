@@ -55,14 +55,7 @@ void calculeVoisins()
 void *f_thread(void *arg)
 {
 	int rc;
-	/*
-	rc = pthread_barrier_wait(&barrier);
-    if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
-    {
-        printf("Could not wait on barrier\n");
-        exit(-1);
-    }*/
-	while(open)
+	for(int i =0 ; i < LOOP;i++)
 	{
 		rc = pthread_barrier_wait(&barrier);
 		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
@@ -75,7 +68,7 @@ void *f_thread(void *arg)
 		nextStep(quartier);	
 	}
 	printf("Thread termine\n");
-	return 0;
+	pthread_exit(NULL);
 }
 
 void tore(){
