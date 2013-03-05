@@ -67,7 +67,7 @@ void *f_thread(void *arg)
 		int quartier = (int&)arg;
 		nextStep(quartier);	
 	}
-	printf("Thread termine\n");
+	//printf("Thread termine\n");
 	pthread_exit(NULL);
 }
 
