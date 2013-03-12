@@ -29,6 +29,40 @@ void calculeCellule(int i,int j){
 	else if( nbVoisins < 2 || nbVoisins > 3)
 		matrice[i][j][next] = 0;
 }
+void ajoutVoisin(int x, int y)
+{
+	for(int i=x-1; i<=x+1; i++)
+		for(int j=y-1; j<=y+1; j++)
+			if(!(i==x && j==y))
+				voisins[i][j][next] = voisins[i][j][first] +1;
+	
+}
+void supprVoisin(int x, int y)
+{
+	for(int i=x-1; i<=x+1; i++)
+		for(int j=y-1; j<=y+1; j++)
+			if(!(i==x && j==y))
+				voisins[i][j][next] = voisins[i][j][first] -1;
+	
+}
+void calculeCelluleVoisin(int i,int j){
+	if(voisins[i][j][first] == 3){
+		if( matrice[i][j][first] == 0)
+			ajoutVoisin(i,j);
+		matrice[i][j][next] = 1;
+	}
+	else if(voisins[i][j][first] == 2){
+		matrice[i][j][next] = matrice[i][j][first];
+		//voisins[i][j][next] = voisins[i][j][first];
+		
+	}
+	else if( voisins[i][j][first] < 2 || voisins[i][j][first] > 3)
+	{
+		if(matrice[i][j][first] == 1)
+			supprVoisin(i,j);
+		matrice[i][j][next] = 0;
+	}	
+}
 
 void nextStep(int quartier){
 	int x_min,x_max,i,j;
@@ -40,10 +74,11 @@ void nextStep(int quartier){
 		x_max -=1;
 	for(i=x_min; i<x_max; i++)
 		for(j=1; j<NB_MATRICE-1; j++)
+			//calculeCelluleVoisin(i,j);
 			calculeCellule(i,j);
 }
 
-void calculeVoisins()
+void initVoisins()
 {
 	for(int i=1;i<NB_MATRICE-1;i++)
 		for(int j=1;j<NB_MATRICE-1;j++)
@@ -55,6 +90,7 @@ void calculeVoisins()
 void *f_thread(void *arg)
 {
 	int rc;
+	int quartier = (int&)arg;
 	for(int i =0 ; i < LOOP;i++)
 	{
 		rc = pthread_barrier_wait(&barrier);
@@ -63,8 +99,6 @@ void *f_thread(void *arg)
 			printf("Impossible d'attendre la barrier\n");
 			exit(-1);
 		}
-		
-		int quartier = (int&)arg;
 		nextStep(quartier);	
 	}
 	//printf("Thread termine\n");

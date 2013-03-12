@@ -9,8 +9,8 @@
 #include "Constantes.h"
 #include "Model.h"
 
-extern short int first;
-extern short int next;
+extern bool first;
+extern bool next;
 extern bool ***matrice;
 
 using namespace sf;
@@ -25,6 +25,16 @@ void affichageShell(int cpt){
 			else
 				printf("o ");
 			}
+		printf("\n");
+	}
+}
+
+void affichageShellVoisins(int cpt){
+	int i,j;
+	printf("------Step %d ------\n",cpt);
+	for(i=1;i<NB_MATRICE-1;i++){
+		for(j=1;j<NB_MATRICE-1;j++)
+			printf("%d ",voisins[i][j][first]);
 		printf("\n");
 	}
 }

@@ -5,32 +5,36 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <semaphore.h>
 #include "Constantes.h"
 #include "Model.h"
 #include "Control.h"
 #include "View.h"
+
 using namespace sf;
 
 int main(int argc, char**argv)
 {
+
 	timeval tv;
 	double deb, final;
 	
-	#ifdef affichage
+	#ifdef graphique
 		VideoMode VMode((NB_MATRICE-2)*multiple, (NB_MATRICE-2)*multiple, 32);
 		RenderWindow App(VMode, "Jeu de la Vie");
 		App.Clear();
 	#endif
-
-  pthread_t tid[NB_THREADS];
-  int i,j;
-  
-    gettimeofday(&tv,NULL);
-	deb = (double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec));
+	
+	pthread_t tid[NB_THREADS];
+	int i,j;
 	init();
 	tore();
+	initVoisins();
+    gettimeofday(&tv,NULL);
+	deb = (double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec));
+	
 	
 	// Creation des threads
 	for(i=0;i<NB_THREADS;i++)
@@ -51,20 +55,14 @@ int main(int argc, char**argv)
 			printf("Impossible d'attendre la barrier\n");
 			exit(-1);
 		}
-		
+		sleep(vitesse);
 		
 		tore();
-
-		if(first == 0){
-			first = 1;
-			next = 0;
-		}
-		else{
-			first = 0 ;
-			next = 1;
-		}
-
-		#ifdef affichage
+		//---------inversion des deux matrices----------
+		first = !first;
+		next = !next;
+		//-----------------------------------------------
+		#ifdef graphique
 		sf::Event Event;
 		while (App.GetEvent(Event))
 		{
@@ -73,6 +71,8 @@ int main(int argc, char**argv)
 		}
 		affichage(App);
 		#endif
+		
+		
 	}
 	gettimeofday(&tv,NULL);
 	final =(double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec) - deb);
@@ -87,6 +87,7 @@ int main(int argc, char**argv)
 	  }
 	
 	  deleteMatrice();
+	  printf("Effectué avec %d threads\n",NB_THREADS);
 	  printf("Matrice de %d sur %d\n",NB_MATRICE,NB_MATRICE);
 	  printf("Pour %d iterations\n", LOOP);
 	  printf("temps execution = %.6f\n",((double)final/1000000));

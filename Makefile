@@ -12,7 +12,7 @@ clean :
 	rm $(EXEC_NAME) $(OBJ_FILES)
 
 $(EXEC_NAME) : $(OBJ_FILES) 
-	$(CC) -o $(EXEC_NAME) $(OBJ_FILES) -lpthread -lsfml-graphics
+	$(CC) -o $(EXEC_NAME) $(OBJ_FILES) -lpthread -lsfml-graphics -lsfml-system -lsfml-window
 
 
 gameLife.o: gameLife.cpp Model.h Control.h View.h Constantes.h

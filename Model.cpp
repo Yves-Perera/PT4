@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include "Model.h"
 
-short int first =0;
-short int next =1;
+bool first =false;
+bool next =true;
 bool *** matrice;
 short int *** voisins;
 pthread_barrier_t barrier;
