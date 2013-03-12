@@ -9,7 +9,7 @@ extern int LOOP; //nombre d'otérations
 
 
 //commenter pour désactiver l affichage
-#define graphique
+//#define graphique
 
 
 #endif

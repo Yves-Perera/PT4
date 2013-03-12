@@ -17,6 +17,7 @@ using namespace sf;
 
 int main(int argc, char**argv)
 {
+	
 	if(argc < 3){
 		printf("Erreur argument(s) manquant(s)\n");
 		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations>\n");
@@ -27,15 +28,16 @@ int main(int argc, char**argv)
 		NB_THREADS = atoi(argv[2]);
 		LOOP = atoi(argv[3]);
 	}
-	timeval tv;
-	double deb, final;
-
-	#ifdef graphique
+	
+	#ifdef GRAPHIQUE
 		VideoMode VMode((NB_MATRICE-2)*multiple, (NB_MATRICE-2)*multiple, 32);
 		RenderWindow App(VMode, "Jeu de la Vie");
 		App.Clear();
 	#endif
-		
+	
+	timeval tv;
+	double deb, final;
+	
 	pthread_t tid[NB_THREADS];
 	int i,j;
 	init();
@@ -72,14 +74,14 @@ int main(int argc, char**argv)
 		first = !first;
 		next = !next;
 		//-----------------------------------------------
-		#ifdef graphique
-		sf::Event Event;
-		while (App.GetEvent(Event))
-		{
-			if (Event.Type == sf::Event::Closed)
-				App.Close();
-		}
-		affichage(App);
+		#ifdef GRAPHIQUE
+			sf::Event Event;
+			while (App.GetEvent(Event))
+			{
+				if (Event.Type == sf::Event::Closed)
+					App.Close();
+			}
+			affichage(App);
 		#endif
 		
 		

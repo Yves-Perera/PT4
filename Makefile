@@ -1,5 +1,9 @@
 CC = g++
-CFLAGS = -lpthread -lsfml-graphics
+ifeq (x,$(firstword $(MAKECMDGOALS)))
+	CFLAGS=-lpthread -lsfml-graphics -DGRAPHIQUE
+else
+	CFLAGS=-lpthread -lsfml-graphics 
+endif
 EXEC_NAME = JeuDeLaVie
 INCLUDES =
 LIBS =
@@ -7,6 +11,8 @@ OBJ_FILES = gameLife.o Model.o Control.o View.o Constantes.o
 INSTALL_DIR = /usr/bin
 
 all : $(EXEC_NAME)
+
+x: $(EXEC_NAME)
 
 clean :
 	rm $(EXEC_NAME) $(OBJ_FILES)
