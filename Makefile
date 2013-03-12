@@ -3,7 +3,7 @@ CFLAGS = -lpthread -lsfml-graphics
 EXEC_NAME = JeuDeLaVie
 INCLUDES =
 LIBS =
-OBJ_FILES = gameLife.o Model.o Control.o View.o
+OBJ_FILES = gameLife.o Model.o Control.o View.o Constantes.o
 INSTALL_DIR = /usr/bin
 
 all : $(EXEC_NAME)
@@ -20,7 +20,9 @@ gameLife.o: gameLife.cpp Model.h Control.h View.h Constantes.h
 	
 Model.o: Model.cpp Constantes.h
 	$(CC) $(CFLAGS) -o $@ -c $<
-		
+
+Constantes.o: Constantes.cpp Constantes.h
+	$(CC) $(CFLAGS) -o $@ -c $<		
  
 Control.o: Control.cpp Model.h Constantes.h
 	$(CC) $(CFLAGS) -o $@ -c $<
