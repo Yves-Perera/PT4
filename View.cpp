@@ -28,7 +28,7 @@ void affichageShell(int cpt){
 		printf("\n");
 	}
 }
-
+/*
 void affichageShellVoisins(int cpt){
 	int i,j;
 	printf("------Step %d ------\n",cpt);
@@ -37,7 +37,7 @@ void affichageShellVoisins(int cpt){
 			printf("%d ",voisins[i][j][first]);
 		printf("\n");
 	}
-}
+}*/
 
 void affichage(RenderWindow &App)
 {

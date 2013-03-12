@@ -42,7 +42,6 @@ int main(int argc, char**argv)
 	int i,j;
 	init();
 	tore();
-	initVoisins();
     gettimeofday(&tv,NULL);
 	deb = (double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec));
 	
@@ -61,6 +60,7 @@ int main(int argc, char**argv)
 	
 	for(int i =0 ; i < LOOP;i++)//while(cpt < 1000) //App.IsOpened())
 	{
+		tore();
 		rc = pthread_barrier_wait(&barrier);
 		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
 		{
@@ -69,7 +69,7 @@ int main(int argc, char**argv)
 		}
 		sleep(vitesse);
 		
-		tore();
+		
 		//---------inversion des deux matrices----------
 		first = !first;
 		next = !next;

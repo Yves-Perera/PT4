@@ -29,6 +29,7 @@ void calculeCellule(int i,int j){
 	else if( nbVoisins < 2 || nbVoisins > 3)
 		matrice[i][j][next] = 0;
 }
+/*
 void ajoutVoisin(int x, int y)
 {
 	for(int i=x-1; i<=x+1; i++)
@@ -63,7 +64,7 @@ void calculeCelluleVoisin(int i,int j){
 		matrice[i][j][next] = 0;
 	}	
 }
-
+*/
 void nextStep(int quartier){
 	int x_min,x_max,i,j;
 	x_min = (NB_MATRICE/NB_THREADS)*quartier;
@@ -71,22 +72,20 @@ void nextStep(int quartier){
 	if(quartier == 0)
 		x_min +=1;
 	if(quartier == NB_THREADS-1)
-		x_max -=1;
+		x_max =NB_MATRICE-1;
 	for(i=x_min; i<x_max; i++)
 		for(j=1; j<NB_MATRICE-1; j++)
-			//calculeCelluleVoisin(i,j);
 			calculeCellule(i,j);
 }
 
-void initVoisins()
+/*void initVoisins()
 {
 	for(int i=1;i<NB_MATRICE-1;i++)
 		for(int j=1;j<NB_MATRICE-1;j++)
 			for(int k=0;k<2;k++)
 				voisins[i][j][k] = nbCelluleVoisine(i,j);
 	
-}
-
+}*/
 void *f_thread(void *arg)
 {
 	int rc;

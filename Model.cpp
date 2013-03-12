@@ -7,20 +7,20 @@
 bool first =false;
 bool next =true;
 bool *** matrice;
-short int *** voisins;
+//short int *** voisins;
 pthread_barrier_t barrier;
 
 void init(){
 	matrice = new bool**[NB_MATRICE];
-	voisins = new short int **[NB_MATRICE];
+	//voisins = new short int **[NB_MATRICE];
 	
     for(int i=0;i<NB_MATRICE;i++){
         matrice[i] = new bool*[NB_MATRICE];
-        voisins[i] = new short int *[NB_MATRICE];
+        //voisins[i] = new short int *[NB_MATRICE];
         
         for(int j=0;j<NB_MATRICE;j++){
             matrice[i][j] = new bool[2];
-            voisins[i][j] = new short int[2];
+            //voisins[i][j] = new short int[2];
         }
     }
     
@@ -42,12 +42,12 @@ void deleteMatrice()
 		for(int j=0;j<NB_MATRICE;j++)
 		{
              delete[] matrice[i][j];
-             delete[] voisins[i][j];
+             //delete[] voisins[i][j];
         }
         delete[] matrice[i];
-        delete[] voisins[i];
+        //delete[] voisins[i];
     }
     
     delete[] matrice;
-	delete[] voisins;
+	//delete[] voisins;
 }
