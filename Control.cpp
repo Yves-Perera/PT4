@@ -20,14 +20,17 @@ int nbCelluleVoisine(int x, int y){
 	return cpt;
 }
 
-void calculeCellule(int i,int j){
+bool calculeCellule(int i,int j){ //retourne vrai si il y a un changement
 	int nbVoisins = nbCelluleVoisine(i,j);
-	if( nbVoisins == 3)
+	if(nbVoisins == 3)
 		matrice[i][j][next] = 1;
 	else if( nbVoisins == 2)
 		matrice[i][j][next] = matrice[i][j][first];
-	else if( nbVoisins < 2 || nbVoisins > 3)
+		
+	else
 		matrice[i][j][next] = 0;
+		
+	return(matrice[i][j][next] != matrice[i][j][first]);
 }
 /*
 void ajoutVoisin(int x, int y)
@@ -64,18 +67,28 @@ void calculeCelluleVoisin(int i,int j){
 		matrice[i][j][next] = 0;
 	}	
 }
-*/
-void nextStep(int quartier){
-	int x_min,x_max,i,j;
+//*/
+void nextStep(int quartier, bool actif[]){
+	int x_min,x_max,i,j,cpt=0;
+	bool changement = false;
 	x_min = (NB_MATRICE/NB_THREADS)*quartier;
 	x_max = (NB_MATRICE/NB_THREADS)*(quartier+1);
 	if(quartier == 0)
 		x_min +=1;
 	if(quartier == NB_THREADS-1)
 		x_max =NB_MATRICE-1;
-	for(i=x_min; i<x_max; i++)
-		for(j=1; j<NB_MATRICE-1; j++)
-			calculeCellule(i,j);
+	for(i=x_min; i<x_max; ++i)
+	{
+		for(j=1; j<NB_MATRICE-1; ++j){
+			if(calculeCellule(i,j))
+				changement = true;
+		}
+		if(i==(((NB_MATRICE-2)/NB_SEC)-1)*cpt){
+			if(changement)
+				actif[cpt] = false;
+			cpt++;	
+		}
+	}
 }
 
 /*void initVoisins()
@@ -90,6 +103,10 @@ void *f_thread(void *arg)
 {
 	int rc;
 	int quartier = (int&)arg;
+	bool * actif = (bool*)malloc(NB_SEC*sizeof(bool));
+	
+	for(int i=0; i<NB_SEC;i++)
+		actif[i] = true;
 	for(int i =0 ; i < LOOP;i++)
 	{
 		rc = pthread_barrier_wait(&barrier);
@@ -98,9 +115,10 @@ void *f_thread(void *arg)
 			printf("Impossible d'attendre la barrier\n");
 			exit(-1);
 		}
-		nextStep(quartier);	
+		nextStep(quartier,actif);	
 	}
 	//printf("Thread termine\n");
+	free(actif);
 	pthread_exit(NULL);
 }
 

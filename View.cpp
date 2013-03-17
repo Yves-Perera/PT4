@@ -46,16 +46,15 @@ void affichage(RenderWindow &App)
 	sf::Shape pix  = sf::Shape::Rectangle(0,0,multiple,multiple,sf::Color(0, 0, 255));
     App.Draw(fond);
 	for(i=1;i<NB_MATRICE-1;i++){
-
-            for(j=1;j<NB_MATRICE-1;j++){
-                if(matrice[i][j][first] == 1)
-                    App.Draw(pix);
-                pix.Move(multiple,0);
-			}
-			pix.Move(-(NB_MATRICE-2)*multiple,multiple);
-
+		for(j=1;j<NB_MATRICE-1;j++)
+		{
+			if(matrice[i][j][first] == 1)
+				App.Draw(pix);
+            pix.Move(multiple,0);
+		}
+		pix.Move(-(NB_MATRICE-2)*multiple,multiple);
 	}
-	    App.Display();
+	App.Display();
 }
 
 void *f_affichage(void *arg, RenderWindow &App)

@@ -14,41 +14,45 @@
 #include "View.h"
 
 using namespace sf;
-
-int main(int argc, char**argv)
+void usage(int argc, char**argv)
 {
-	
-	if(argc < 3){
+	if(argc < 4 || argc > 5){
 		printf("Erreur argument(s) manquant(s)\n");
-		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations>\n");
+		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations> [<nombre de sections>]\n");
 		exit(-1);
 	}
-	else{
-		NB_MATRICE = atoi(argv[1]);
-		NB_THREADS = atoi(argv[2]);
-		LOOP = atoi(argv[3]);
-	}
-	
+	NB_MATRICE = atoi(argv[1]);
+	NB_THREADS = atoi(argv[2]);
+	LOOP = atoi(argv[3]);
+	if(argc == 5)
+		NB_SEC = atoi(argv[4]);
+	else
+		NB_SEC = 1;	
+}
+int main(int argc, char**argv)
+{
+	//---Lecture des arguments---------------------------
+	usage(argc,argv);
+	//---------------------------------------------------
 	#ifdef GRAPHIQUE
 		VideoMode VMode((NB_MATRICE-2)*multiple, (NB_MATRICE-2)*multiple, 32);
 		RenderWindow App(VMode, "Jeu de la Vie");
 		App.Clear();
 	#endif
 	
-	timeval tv;
-	double deb, final;
-	
+	timeval tv;//chrono pour mesurer le temps d execution
+	double deb,final;
 	pthread_t tid[NB_THREADS];
-	int i,j;
-	init();
-	tore();
+	
+	init();//génération aléatoire de la matrice
+	tore();//application du tore
     gettimeofday(&tv,NULL);
-	deb = (double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec));
+	deb = (double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec));//top du chrono
 	
 	
 	// Creation des threads
 	int ret;
-	for(i=0;i<NB_THREADS;i++)
+	for(int i=0;i<NB_THREADS;i++)
 	{
 		ret = pthread_create(&tid[i], NULL, f_thread, (void*)i);
 		if(ret) {
@@ -57,18 +61,12 @@ int main(int argc, char**argv)
 		}
 	}
 	int rc;
-	
 	for(int i =0 ; i < LOOP;i++)//while(cpt < 1000) //App.IsOpened())
 	{
 		tore();
 		rc = pthread_barrier_wait(&barrier);
-		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
-		{
-			printf("Impossible d'attendre la barrier\n");
-			exit(-1);
-		}
+		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD){printf("Impossible d'attendre la barrier\n");exit(-1);}
 		sleep(vitesse);
-		
 		
 		//---------inversion des deux matrices----------
 		first = !first;
@@ -83,27 +81,26 @@ int main(int argc, char**argv)
 			}
 			affichage(App);
 		#endif
-		
-		
 	}
+	
 	gettimeofday(&tv,NULL);
 	final =(double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec) - deb);
 	void *ret_val;
 	for(int i=0;i<NB_THREADS;i++)
-	  {
+	{
 		int ret = pthread_join(tid[i], &ret_val);
-		if(ret) {
-		  fprintf(stderr, "Erreur lors de l'attente du thread %d\n", i);
-		  return 1;
-		}
-	  }
+		if(ret){fprintf(stderr, "Erreur lors de l'attente du thread %d\n", i);return 1;}
+	}
 	
-	  deleteMatrice();
-	  printf("--------------------------\n");
-	  printf("Effectue avec %d threads\n",NB_THREADS);
-	  printf("Matrice de %d sur %d\n",NB_MATRICE,NB_MATRICE);
-	  printf("Pour %d iterations\n", LOOP);
-	  printf("temps execution = %.6f\n",((double)final/1000000));
-	  printf("--------------------------\n");
+	deleteMatrice(); //suppression des tableaux dynamiques
+	//-------Information sur l execution-------------------------
+	printf("--------------------------\n");
+	printf("Effectue avec %d threads\n",NB_THREADS);
+	printf("Effectue avec %d sections d'inactivité dans chaque threads\n",NB_SEC);
+	printf("Matrice de %d sur %d\n",NB_MATRICE,NB_MATRICE);
+	printf("Pour %d iterations\n", LOOP);
+	printf("temps execution = %.6f\n",((double)final/1000000));
+	printf("--------------------------\n");
+	//------------------------------------------------------------
 	return EXIT_SUCCESS;
 }

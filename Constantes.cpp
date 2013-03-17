@@ -1,3 +1,4 @@
 int NB_MATRICE;
 int NB_THREADS; 
-int LOOP; 
+int LOOP;
+short int NB_SEC;

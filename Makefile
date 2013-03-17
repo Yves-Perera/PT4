@@ -1,8 +1,10 @@
 CC = g++
 ifeq (x,$(firstword $(MAKECMDGOALS)))
 	CFLAGS=-lpthread -lsfml-graphics -DGRAPHIQUE
+else ifeq (debug,$(firstword $(MAKECMDGOALS)))
+	CFLAGS=-lpthread -lsfml-graphics -g
 else
-	CFLAGS=-lpthread -lsfml-graphics 
+	CFLAGS=-lpthread -lsfml-graphics
 endif
 EXEC_NAME = JeuDeLaVie
 INCLUDES =
@@ -14,7 +16,12 @@ all : $(EXEC_NAME)
 
 x: $(EXEC_NAME)
 
+debug: $(EXEC_NAME)
+
 clean :
+	rm $(OBJ_FILES)
+	
+mrpropper:
 	rm $(EXEC_NAME) $(OBJ_FILES)
 
 $(EXEC_NAME) : $(OBJ_FILES) 

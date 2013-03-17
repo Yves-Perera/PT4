@@ -7,6 +7,6 @@
 void affichageShell(int cpt);
 //void affichageShellVoisins(int cpt);
 void affichage(sf::RenderWindow &App);
-void affichageThread(sf::RenderWindow &App);
+//void affichageThread(sf::RenderWindow &App);
 
 #endif 
