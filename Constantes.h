@@ -6,7 +6,6 @@ extern int NB_THREADS; //nombre de threads utilisé
 #define multiple 2 //taille des cellules en mode graphique
 #define vitesse 0 //temps d'attente entre chaque itération
 extern int LOOP; //nombre d'otérations
-extern short int NB_SEC; //détermine le nombre de section detectant l'inactivité
 
 
 //commenter pour désactiver l affichage

@@ -68,7 +68,7 @@ void calculeCelluleVoisin(int i,int j){
 	}	
 }
 //*/
-void nextStep(int quartier, bool actif[]){
+void nextStep(int quartier){
 	int x_min,x_max,i,j,cpt=0;
 	bool changement = false;
 	x_min = (NB_MATRICE/NB_THREADS)*quartier;
@@ -77,16 +77,13 @@ void nextStep(int quartier, bool actif[]){
 		x_min +=1;
 	if(quartier == NB_THREADS-1)
 		x_max =NB_MATRICE-1;
+		
+		
 	for(i=x_min; i<x_max; ++i)
 	{
 		for(j=1; j<NB_MATRICE-1; ++j){
 			if(calculeCellule(i,j))
 				changement = true;
-		}
-		if(i==(((NB_MATRICE-2)/NB_SEC)-1)*cpt){
-			if(changement)
-				actif[cpt] = false;
-			cpt++;	
 		}
 	}
 }
@@ -103,10 +100,7 @@ void *f_thread(void *arg)
 {
 	int rc;
 	int quartier = (int&)arg;
-	bool * actif = (bool*)malloc(NB_SEC*sizeof(bool));
 	
-	for(int i=0; i<NB_SEC;i++)
-		actif[i] = true;
 	for(int i =0 ; i < LOOP;i++)
 	{
 		rc = pthread_barrier_wait(&barrier);
@@ -115,10 +109,9 @@ void *f_thread(void *arg)
 			printf("Impossible d'attendre la barrier\n");
 			exit(-1);
 		}
-		nextStep(quartier,actif);	
+		nextStep(quartier);	
 	}
 	//printf("Thread termine\n");
-	free(actif);
 	pthread_exit(NULL);
 }
 

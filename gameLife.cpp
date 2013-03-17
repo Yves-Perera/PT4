@@ -16,18 +16,26 @@
 using namespace sf;
 void usage(int argc, char**argv)
 {
-	if(argc < 4 || argc > 5){
-		printf("Erreur argument(s) manquant(s)\n");
-		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations> [<nombre de sections>]\n");
+	if(argc == 2){//  && (argv[1][0] =="-" && argv[1][1] =="h")){
+		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations>\n");
+		exit(0);
+	}
+	else if(argc == 1){
+		printf("Matrice par defaut\n");
+		NB_MATRICE = 250;
+		NB_THREADS = 4;
+		LOOP = 1000;
+	}
+	else if(argc != 4){
+		printf("Erreur nombre d'arguments\n");
+		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations>\n");
 		exit(-1);
 	}
-	NB_MATRICE = atoi(argv[1]);
-	NB_THREADS = atoi(argv[2]);
-	LOOP = atoi(argv[3]);
-	if(argc == 5)
-		NB_SEC = atoi(argv[4]);
-	else
-		NB_SEC = 1;	
+	else{
+		NB_MATRICE = atoi(argv[1]);
+		NB_THREADS = atoi(argv[2]);
+		LOOP = atoi(argv[3]);
+	}
 }
 int main(int argc, char**argv)
 {
@@ -96,7 +104,6 @@ int main(int argc, char**argv)
 	//-------Information sur l execution-------------------------
 	printf("--------------------------\n");
 	printf("Effectue avec %d threads\n",NB_THREADS);
-	printf("Effectue avec %d sections d'inactivité dans chaque threads\n",NB_SEC);
 	printf("Matrice de %d sur %d\n",NB_MATRICE,NB_MATRICE);
 	printf("Pour %d iterations\n", LOOP);
 	printf("temps execution = %.6f\n",((double)final/1000000));
