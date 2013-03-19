@@ -50,6 +50,12 @@ void usage(int argc, char**argv)
 	}
 }
 
+void inversionMatrice()
+{
+	first = !first;
+	next = !next;
+}
+
 int main(int argc, char**argv)
 {
 	//---Lecture des arguments---------------------------
@@ -90,10 +96,7 @@ int main(int argc, char**argv)
 		rc = pthread_barrier_wait(&barrier);
 		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD){printf("Impossible d'attendre la barrier\n");exit(-1);}
 		
-		//---------inversion des deux matrices----------
-		first = !first;
-		next = !next;
-		//-----------------------------------------------
+		inversionMatrice();
 		#ifdef GRAPHIQUE
 			sf::Event Event;
 			while (App.GetEvent(Event))

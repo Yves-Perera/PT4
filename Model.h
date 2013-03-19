@@ -8,8 +8,8 @@ struct Data
 extern bool first;
 extern bool next;
 extern Data *** matrice;
-extern int **bordX;
-extern int **bordY;
+extern int **bordSecY;
+extern int **bordThreadX;
 extern pthread_barrier_t barrier;
 void init();
 void deleteMatrice();
