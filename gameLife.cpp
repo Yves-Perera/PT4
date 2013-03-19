@@ -25,16 +25,28 @@ void usage(int argc, char**argv)
 		NB_MATRICE = 250;
 		NB_THREADS = 4;
 		LOOP = 1000;
+		NB_SEC = 2;
 	}
-	else if(argc != 4){
+	else if(argc != 5){
 		printf("Erreur nombre d'arguments\n");
-		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations>\n");
+		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations> <nombre de sections>\n");
 		exit(-1);
 	}
 	else{
 		NB_MATRICE = atoi(argv[1]);
 		NB_THREADS = atoi(argv[2]);
 		LOOP = atoi(argv[3]);
+		if(atoi(argv[4]) < 1)
+		{
+			printf("Nombre de section incorrect, une section minimum\n");
+			NB_SEC = 1;
+		}
+		else if(atoi(argv[4]) < 129)
+			NB_SEC = atoi(argv[4]);
+		else{
+			NB_SEC = 128;
+			printf("Le nombre maximum de section est 128\n");
+		}
 	}
 }
 
@@ -112,6 +124,7 @@ int main(int argc, char**argv)
 	printf("Effectue avec %d threads\n",NB_THREADS);
 	printf("Matrice de %d sur %d\n",NB_MATRICE,NB_MATRICE);
 	printf("Pour %d iterations\n", LOOP);
+	printf("Avec %d sections par thread detectant la stagnation\n", NB_SEC);
 	printf("temps execution = %.6f\n",((double)final/1000000));
 	printf("--------------------------\n");
 	//------------------------------------------------------------

@@ -7,5 +7,6 @@ extern int NB_THREADS; //nombre de threads utilisé
 #define vitesse 0 //temps d'attente entre chaque itération
 #define transparence 10
 extern int LOOP; //nombre d'otérations
+extern short int NB_SEC;
 
 #endif

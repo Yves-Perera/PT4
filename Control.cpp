@@ -34,34 +34,34 @@ bool calculeCellule(int i,int j){ //retourne vrai si il y a un changement
 }
 
 void nextStep(int quartier){
-	int x_min,x_max,i,j,cpt=0;
-	x_min = (NB_MATRICE/NB_THREADS)*quartier;
-	x_max = (NB_MATRICE/NB_THREADS)*(quartier+1);
+	int y_min,y_max,i,j,cpt=0;
+	y_min = (NB_MATRICE/NB_THREADS)*quartier;
+	y_max = (NB_MATRICE/NB_THREADS)*(quartier+1);
 	if(quartier == 0)
-		x_min +=1;
+		y_min +=1;
 	if(quartier == NB_THREADS-1)
-		x_max =NB_MATRICE-1;
+		y_max =NB_MATRICE-1;
 		
 		
-	for(i=x_min; i<x_max; ++i)
+	for(i=y_min; i<y_max; ++i)
 	{
 		for(j=1; j<NB_MATRICE-1; ++j)
 			calculeCellule(i,j);
 	}
 }
 
-void nextStepStagnation(int quartier, bool &actif){
-	int x_min,x_max,i,j,cpt=0;
+void nextStepStagnation(int quartier, bool actif[]){
+	int y_min,y_max,i,j,cpt=0;
 	bool changement = false;
-	x_min = (NB_MATRICE/NB_THREADS)*quartier;
-	x_max = (NB_MATRICE/NB_THREADS)*(quartier+1);
+	y_min = (NB_MATRICE/NB_THREADS)*quartier;
+	y_max = (NB_MATRICE/NB_THREADS)*(quartier+1);
 	if(quartier == 0)
-		x_min +=1;
+		y_min +=1;
 	if(quartier == NB_THREADS-1)
-		x_max =NB_MATRICE-1;
+		y_max =NB_MATRICE-1;
 		
 	//Calcule des bords
-	for(i=x_min+1; i<x_max-1; ++i) //-1 et +1 pour éviter de passer deux fois sur les coins
+	for(i=y_min+1; i<y_max-1; ++i) //-1 et +1 pour éviter de passer deux fois sur les coins
 	{
 		if(calculeCellule(i,1))
 			changement = true;
@@ -70,16 +70,16 @@ void nextStepStagnation(int quartier, bool &actif){
 	}
 	for(j=1; j<NB_MATRICE-1; ++j)
 	{
-		if(calculeCellule(x_min,j))
+		if(calculeCellule(y_min,j))
 			changement = true;
-		if(calculeCellule(x_max-1,j))
+		if(calculeCellule(y_max-1,j))
 			changement = true;
 	}
 	
 	//si zone active, calcule de l interieur
-	if(actif)
+	if(actif[0])
 	{
-		for(i=x_min+1; i<x_max-1; ++i)
+		for(i=y_min+1; i<y_max-1; ++i)
 		{
 			for(j=2; j<NB_MATRICE-2; ++j){
 				if(calculeCellule(i,j))
@@ -87,9 +87,47 @@ void nextStepStagnation(int quartier, bool &actif){
 			}
 		}
 	}
-	actif = changement;
+	actif[0] = changement;
 }
 
+void calculeSection(int numThread, bool actif[], int numSection)
+{
+	int i,j;
+	bool changement = false;
+	//Calcule des bords
+	for(i=bordX[numSection][0]+1; i<bordX[numSection][1]-1; ++i) //-1 et +1 pour éviter de passer deux fois sur les coins
+	{
+		if(calculeCellule(i,bordY[numThread][0]))
+			changement = true;
+		if(calculeCellule(i,bordY[numThread][1]))
+			changement = true;
+	}
+	for(j=bordY[numThread][0]+1; j<bordY[numThread][1]-1; ++j)
+	{
+		if(calculeCellule(bordX[numSection][0],j))
+			changement = true;
+		if(calculeCellule(bordX[numSection][1],j))
+			changement = true;
+	}
+	
+	//si zone active, calcule de l interieur
+	if(actif[numSection])
+	{
+		for(i=bordX[numSection][0]; i<bordX[numSection][1]; ++i)
+		{
+			for(j=bordY[numThread][0]; j<bordY[numThread][1]; ++j){
+				if(calculeCellule(i,j))
+					changement = true;
+			}
+		}
+	}
+	actif[numSection] = changement;
+}
+void nextStepSection(int numThread, bool actif[])
+{
+	for(int i =0; i<NB_SEC; i++)
+		calculeSection(numThread,actif,i);
+}
 void *f_thread(void *arg)
 {
 	int rc;
@@ -111,15 +149,18 @@ void *f_thread(void *arg)
 void *f_threadStagnation(void *arg)
 {
 	int rc;
-	int quartier = (int&)arg;
-	bool actif=true;
+	int numThread = (int&)arg;
+	bool *actif= new bool[NB_SEC];
+	for(int i =0 ; i < NB_SEC;i++)
+		actif[i] = true; 
 	
 	for(int i =0 ; i < LOOP;i++)
 	{
 		rc = pthread_barrier_wait(&barrier);
 		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD) {printf("Impossible d'attendre la barrier\n"); exit(-1);}
 		
-		nextStepStagnation(quartier,actif);
+		//nextStepStagnation(quartier,actif);
+		nextStepSection(numThread,actif);
 	}
 	
 	pthread_exit(NULL);

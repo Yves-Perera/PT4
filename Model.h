@@ -3,10 +3,13 @@
 struct Data
 {
    unsigned cellule  : 1;
+   unsigned numSec : 7;
 };
 extern bool first;
 extern bool next;
 extern Data *** matrice;
+extern int **bordX;
+extern int **bordY;
 extern pthread_barrier_t barrier;
 void init();
 void deleteMatrice();
