@@ -7,9 +7,4 @@ extern int NB_THREADS; //nombre de threads utilisé
 #define vitesse 0 //temps d'attente entre chaque itération
 extern int LOOP; //nombre d'otérations
 
-
-//commenter pour désactiver l affichage
-//#define graphique
-
-
 #endif

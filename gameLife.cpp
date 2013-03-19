@@ -16,7 +16,7 @@
 using namespace sf;
 void usage(int argc, char**argv)
 {
-	if(argc == 2){//  && (argv[1][0] =="-" && argv[1][1] =="h")){
+	if(argc == 2){
 		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations>\n");
 		exit(0);
 	}
@@ -37,6 +37,7 @@ void usage(int argc, char**argv)
 		LOOP = atoi(argv[3]);
 	}
 }
+
 int main(int argc, char**argv)
 {
 	//---Lecture des arguments---------------------------
@@ -69,18 +70,20 @@ int main(int argc, char**argv)
 		}
 	}
 	int rc;
-	for(int i =0 ; i < LOOP;i++)//while(cpt < 1000) //App.IsOpened())
+	
+	//Boucle principale
+	for(int i =0 ; i < LOOP;i++)
 	{
 		tore();
 		rc = pthread_barrier_wait(&barrier);
 		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD){printf("Impossible d'attendre la barrier\n");exit(-1);}
-		sleep(vitesse);
 		
 		//---------inversion des deux matrices----------
 		first = !first;
 		next = !next;
 		//-----------------------------------------------
 		#ifdef GRAPHIQUE
+			sleep(vitesse);
 			sf::Event Event;
 			while (App.GetEvent(Event))
 			{
@@ -92,7 +95,9 @@ int main(int argc, char**argv)
 	}
 	
 	gettimeofday(&tv,NULL);
-	final =(double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec) - deb);
+	final =(double)((double)tv.tv_sec*1000000 + (double)(tv.tv_usec) - deb);//recupere le chrono
+	
+	//Arrete les threads
 	void *ret_val;
 	for(int i=0;i<NB_THREADS;i++)
 	{
@@ -100,7 +105,8 @@ int main(int argc, char**argv)
 		if(ret){fprintf(stderr, "Erreur lors de l'attente du thread %d\n", i);return 1;}
 	}
 	
-	deleteMatrice(); //suppression des tableaux dynamiques
+	deleteMatrice(); //suppression de la matrice dynamiques
+	
 	//-------Information sur l execution-------------------------
 	printf("--------------------------\n");
 	printf("Effectue avec %d threads\n",NB_THREADS);
