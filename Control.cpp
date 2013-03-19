@@ -15,7 +15,7 @@ int nbCelluleVoisine(int x, int y){
 	for(i=x-1; i<=x+1; i++)
 		for(j=y-1; j<=y+1; j++)
 			if(!(i==x && j==y))
-				if(matrice[i][j][first] == 1)
+				if(matrice[i][j][first].cellule == 1)
 					cpt++;
 	return cpt;
 }
@@ -23,19 +23,18 @@ int nbCelluleVoisine(int x, int y){
 bool calculeCellule(int i,int j){ //retourne vrai si il y a un changement
 	int nbVoisins = nbCelluleVoisine(i,j);
 	if(nbVoisins == 3)
-		matrice[i][j][next] = 1;
+		matrice[i][j][next].cellule = 1;
 	else if( nbVoisins == 2)
-		matrice[i][j][next] = matrice[i][j][first];
+		matrice[i][j][next].cellule = matrice[i][j][first].cellule;
 		
 	else
-		matrice[i][j][next] = 0;
+		matrice[i][j][next].cellule = 0;
 		
-	return(matrice[i][j][next] != matrice[i][j][first]);
+	return(matrice[i][j][next].cellule != matrice[i][j][first].cellule);
 }
 
 void nextStep(int quartier){
 	int x_min,x_max,i,j,cpt=0;
-	bool changement = false;
 	x_min = (NB_MATRICE/NB_THREADS)*quartier;
 	x_max = (NB_MATRICE/NB_THREADS)*(quartier+1);
 	if(quartier == 0)
@@ -46,14 +45,12 @@ void nextStep(int quartier){
 		
 	for(i=x_min; i<x_max; ++i)
 	{
-		for(j=1; j<NB_MATRICE-1; ++j){
-			if(calculeCellule(i,j))
-				changement = true;
-		}
+		for(j=1; j<NB_MATRICE-1; ++j)
+			calculeCellule(i,j);
 	}
 }
 
-void nextStepStagnation(int quartier){
+void nextStepStagnation(int quartier, bool &actif){
 	int x_min,x_max,i,j,cpt=0;
 	bool changement = false;
 	x_min = (NB_MATRICE/NB_THREADS)*quartier;
@@ -63,14 +60,34 @@ void nextStepStagnation(int quartier){
 	if(quartier == NB_THREADS-1)
 		x_max =NB_MATRICE-1;
 		
-		
-	for(i=x_min; i<x_max; ++i)
+	//Calcule des bords
+	for(i=x_min+1; i<x_max-1; ++i) //-1 et +1 pour éviter de passer deux fois sur les coins
 	{
-		for(j=1; j<NB_MATRICE-1; ++j){
-			if(calculeCellule(i,j))
-				changement = true;
+		if(calculeCellule(i,1))
+			changement = true;
+		if(calculeCellule(i,NB_MATRICE-2))
+			changement = true;
+	}
+	for(j=1; j<NB_MATRICE-1; ++j)
+	{
+		if(calculeCellule(x_min,j))
+			changement = true;
+		if(calculeCellule(x_max-1,j))
+			changement = true;
+	}
+	
+	//si zone active, calcule de l interieur
+	if(actif)
+	{
+		for(i=x_min+1; i<x_max-1; ++i)
+		{
+			for(j=2; j<NB_MATRICE-2; ++j){
+				if(calculeCellule(i,j))
+					changement = true;
+			}
 		}
 	}
+	actif = changement;
 }
 
 void *f_thread(void *arg)
@@ -80,13 +97,13 @@ void *f_thread(void *arg)
 	
 	for(int i =0 ; i < LOOP;i++)
 	{
+		nextStep(quartier);	
 		rc = pthread_barrier_wait(&barrier);
 		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
 		{
 			printf("Impossible d'attendre la barrier\n");
 			exit(-1);
 		}
-		nextStep(quartier);	
 	}
 	pthread_exit(NULL);
 }
@@ -95,35 +112,33 @@ void *f_threadStagnation(void *arg)
 {
 	int rc;
 	int quartier = (int&)arg;
-	bool actif;
+	bool actif=true;
 	
 	for(int i =0 ; i < LOOP;i++)
 	{
 		rc = pthread_barrier_wait(&barrier);
-		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD)
-		{
-			printf("Impossible d'attendre la barrier\n");
-			exit(-1);
-		}
-		nextStepStagnation(quartier);
+		if(rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD) {printf("Impossible d'attendre la barrier\n"); exit(-1);}
+		
+		nextStepStagnation(quartier,actif);
 	}
+	
 	pthread_exit(NULL);
 }
 
 void tore(){
 
 	for(int i=1;i<NB_MATRICE-1;i++){
-		matrice[i][0][first] = matrice[i][NB_MATRICE-2][first];
-		matrice[i][NB_MATRICE -1][first] = matrice[i][1][first];
+		matrice[i][0][first].cellule = matrice[i][NB_MATRICE-2][first].cellule;
+		matrice[i][NB_MATRICE -1][first].cellule = matrice[i][1][first].cellule;
 
-		matrice[0][i][first] = matrice[NB_MATRICE-2][i][first];
-		matrice[NB_MATRICE-1][i][first] = matrice[1][i][first];
+		matrice[0][i][first].cellule = matrice[NB_MATRICE-2][i][first].cellule;
+		matrice[NB_MATRICE-1][i][first].cellule = matrice[1][i][first].cellule;
 	}
 	
-	matrice[0][0][first] = matrice[NB_MATRICE-2][NB_MATRICE-2][first];
-	matrice[0][NB_MATRICE-1][first] = matrice[NB_MATRICE-2][1][first];
-	matrice[NB_MATRICE-1][0][first] = matrice[1][NB_MATRICE-2][first];
-	matrice[NB_MATRICE-1][NB_MATRICE-1][first] = matrice[1][1][first];
+	matrice[0][0][first].cellule = matrice[NB_MATRICE-2][NB_MATRICE-2][first].cellule;
+	matrice[0][NB_MATRICE-1][first].cellule = matrice[NB_MATRICE-2][1][first].cellule;
+	matrice[NB_MATRICE-1][0][first].cellule = matrice[1][NB_MATRICE-2][first].cellule;
+	matrice[NB_MATRICE-1][NB_MATRICE-1][first].cellule = matrice[1][1][first].cellule;
 }
 
 

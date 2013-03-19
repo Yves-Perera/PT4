@@ -11,7 +11,7 @@
 
 extern bool first;
 extern bool next;
-extern bool ***matrice;
+extern Data ***matrice;
 
 using namespace sf;
 
@@ -20,7 +20,7 @@ void affichageShell(int cpt){
 	printf("------Step %d ------\n",cpt);
 	for(i=1;i<NB_MATRICE-1;i++){
 		for(j=1;j<NB_MATRICE-1;j++){
-			if(matrice[i][j][first] == 1)
+			if(matrice[i][j][first].cellule == 1)
 				printf("x ");
 			else
 				printf("o ");
@@ -42,13 +42,13 @@ void affichageShellVoisins(int cpt){
 void affichage(RenderWindow &App)
 {
 	int i,j;
-	sf::Shape fond = Shape::Rectangle(0,0,(NB_MATRICE-2)*multiple, (NB_MATRICE-2)*multiple, Color(0,0,0,10));
+	sf::Shape fond = Shape::Rectangle(0,0,(NB_MATRICE-2)*multiple, (NB_MATRICE-2)*multiple, Color(0,0,0,transparence));
 	sf::Shape pix  = sf::Shape::Rectangle(0,0,multiple,multiple,sf::Color(0, 0, 255));
     App.Draw(fond);
 	for(i=1;i<NB_MATRICE-1;i++){
 		for(j=1;j<NB_MATRICE-1;j++)
 		{
-			if(matrice[i][j][first] == 1)
+			if(matrice[i][j][first].cellule == 1)
 				App.Draw(pix);
             pix.Move(multiple,0);
 		}
@@ -76,7 +76,7 @@ void *f_affichage(void *arg, RenderWindow &App)
 	{
 		for(j=1; j<NB_MATRICE-1; j++)
 		{
-            if(matrice[i][j][first] == 1)
+            if(matrice[i][j][first].cellule == 1)
 				App.Draw(pix);
 			pix.Move(multiple,0);
 		}

@@ -63,7 +63,7 @@ int main(int argc, char**argv)
 	int ret;
 	for(int i=0;i<NB_THREADS;i++)
 	{
-		ret = pthread_create(&tid[i], NULL, f_thread, (void*)i);
+		ret = pthread_create(&tid[i], NULL, f_threadStagnation, (void*)i);
 		if(ret) {
 			fprintf(stderr, "Impossible de créer le thread %d\n", i);
 			return 1;
@@ -83,7 +83,6 @@ int main(int argc, char**argv)
 		next = !next;
 		//-----------------------------------------------
 		#ifdef GRAPHIQUE
-			sleep(vitesse);
 			sf::Event Event;
 			while (App.GetEvent(Event))
 			{
@@ -91,6 +90,7 @@ int main(int argc, char**argv)
 					App.Close();
 			}
 			affichage(App);
+			sleep(vitesse);
 		#endif
 	}
 	
