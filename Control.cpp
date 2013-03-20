@@ -68,9 +68,9 @@ void calculeSection(int numThread, bool actif[], int numSection)
 	//si zone active, calcule de l interieur
 	if(actif[numSection])
 	{
-		for(i=bordSecY[numSection][0]; i<bordSecY[numSection][1]; ++i)
+		for(i=bordSecY[numSection][0]; i<bordSecY[numSection][1]; i++)
 		{
-			for(j=bordThreadX[numThread][0]; j<bordThreadX[numThread][1]; ++j){
+			for(j=bordThreadX[numThread][0]; j<bordThreadX[numThread][1]; j++){
 				if(calculeCellule(i,j))
 					changement = true;
 			}

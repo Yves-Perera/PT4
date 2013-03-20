@@ -30,7 +30,7 @@ void init(){
 	for(int i=0;i<NB_SEC;i++)
 	{
 		bordSecY[i][0] = (NB_MATRICE/NB_SEC)*i+1;
-		bordThreadX[i][1] = ((NB_MATRICE/NB_SEC)*(i+1));
+		bordSecY[i][1] = ((NB_MATRICE/NB_SEC)*(i+1));
 	}
 	for(int i=0;i<NB_THREADS;i++)
 	{
