@@ -14,11 +14,43 @@
 #include "View.h"
 
 using namespace sf;
+
 void usage(int argc, char**argv)
 {
 	if(argc == 2){
-		printf("Utilisation: App <Taille Matric> <Nombre de threads> <Nombre Iterations>\n");
-		exit(0);
+		if(atoi(argv[1]) < 4 && atoi(argv[1]) > -1)
+		{
+			printf("Patern %d choisi\n",atoi(argv[1]));
+			switch(atoi(argv[1])){
+				case 0:printf("Matrice par defaut\n");
+					NB_MATRICE = 250;
+					NB_THREADS = 4;
+					LOOP = 1000;
+					NB_SEC = 2;
+					break;
+				case 1:printf("Matrice vide\n");
+					NB_MATRICE = 250;
+					NB_THREADS = 4;
+					LOOP = 1000;
+					NB_SEC = 2;
+					break;
+				case 2:printf("Matrice de test avec 1 Section\n");
+					NB_MATRICE = 250;
+					NB_THREADS = 4;
+					LOOP = 10000;
+					NB_SEC = 1;
+					break;
+				case 3:printf("Matrice de test avec 4 Sections\n");
+					NB_MATRICE = 250;
+					NB_THREADS = 4;
+					LOOP = 10000;
+					NB_SEC = 4;
+					break;
+			}
+			patern = atoi(argv[1]);
+		}
+		else
+			exit(-1);
 	}
 	else if(argc == 1){
 		printf("Matrice par defaut\n");
@@ -41,11 +73,11 @@ void usage(int argc, char**argv)
 			printf("Nombre de section incorrect, une section minimum\n");
 			NB_SEC = 1;
 		}
-		else if(atoi(argv[4]) < 129)
+		else if(atoi(argv[4]) < 254)
 			NB_SEC = atoi(argv[4]);
 		else{
-			NB_SEC = 128;
-			printf("Le nombre maximum de section est 128\n");
+			NB_SEC = 254;
+			printf("Le nombre maximum de section est 254\n");
 		}
 	}
 }

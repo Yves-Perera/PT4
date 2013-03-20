@@ -3,7 +3,7 @@
 struct Data
 {
    unsigned cellule  : 1;
-   unsigned numSec : 7;
+   //unsigned numSec : 7; //7bits libre
 };
 extern bool first;
 extern bool next;

@@ -8,5 +8,6 @@ extern int NB_THREADS; //nombre de threads utilisé
 #define transparence 254 //254 aucune transparance, 0 totalement transparent
 extern int LOOP; //nombre d'otérations
 extern short int NB_SEC;
+extern short int patern;
 
 #endif

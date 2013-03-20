@@ -28,17 +28,6 @@ void affichageShell(int cpt){
 		printf("\n");
 	}
 }
-/*
-void affichageShellVoisins(int cpt){
-	int i,j;
-	printf("------Step %d ------\n",cpt);
-	for(i=1;i<NB_MATRICE-1;i++){
-		for(j=1;j<NB_MATRICE-1;j++)
-			printf("%d ",voisins[i][j][first]);
-		printf("\n");
-	}
-}*/
-
 void affichage(RenderWindow &App)
 {
 	int i,j;
