@@ -81,18 +81,25 @@ void init(){
 		matrice[3][5][1].cellule = 1;
 		
 		matrice[80][90][0].cellule = 1;
-		matrice[80][90][0].cellule = 1;
-		matrice[80][90][0].cellule = 1;
+		matrice[81][90][0].cellule = 1;
+		matrice[82][90][0].cellule = 1;
 		matrice[80][90][1].cellule = 1;
-		matrice[80][90][1].cellule = 1;
-		matrice[80][90][1].cellule = 1;
+		matrice[81][90][1].cellule = 1;
+		matrice[82][90][1].cellule = 1;
 		
 		matrice[130][150][0].cellule = 1;
-		matrice[130][150][0].cellule = 1;
-		matrice[130][150][0].cellule = 1;
+		matrice[131][150][0].cellule = 1;
+		matrice[132][150][0].cellule = 1;
 		matrice[130][150][1].cellule = 1;
-		matrice[130][150][1].cellule = 1;
-		matrice[130][150][1].cellule = 1;
+		matrice[131][150][1].cellule = 1;
+		matrice[132][150][1].cellule = 1;
+		
+		matrice[130][240][0].cellule = 1;
+		matrice[131][240][0].cellule = 1;
+		matrice[132][240][0].cellule = 1;
+		matrice[130][240][1].cellule = 1;
+		matrice[131][240][1].cellule = 1;
+		matrice[132][240][1].cellule = 1;
 		
 	}
 	if(pthread_barrier_init(&barrier, NULL, NB_THREADS+1))
